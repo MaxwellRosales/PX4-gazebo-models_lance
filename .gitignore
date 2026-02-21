@@ -1,1 +1,5 @@
 sdf_parsing/build/
+
+models/lunar_*
+models/martian*
+models/solar_panel*
