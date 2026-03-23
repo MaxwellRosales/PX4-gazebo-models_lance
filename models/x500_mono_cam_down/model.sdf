@@ -1,19 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sdf version='1.9'>
-  <model name='x500_mono_cam_down'>
+<sdf version="1.9">
+  <model name="x500_mono_cam_down">
+
     <self_collide>false</self_collide>
-    <include merge='true'>
+
+    <!-- Base drone -->
+    <include merge="true">
       <uri>x500</uri>
     </include>
-    <include merge='true'>
+
+    <!-- Downward camera -->
+    <include merge="true">
       <uri>model://mono_cam</uri>
-      <pose>0 0 .10 0 1.5707 0</pose>
+      <pose>0 0 0.10 0 1.5707 0</pose>
       <name>mono_cam</name>
     </include>
+
+    <!-- Camera joint -->
     <joint name="CameraJoint" type="fixed">
       <parent>base_link</parent>
       <child>camera_link</child>
       <pose relative_to="base_link">0 0 0 0 1.5707 0</pose>
     </joint>
+
+    <!-- ========================= -->
+    <!-- Laser System (Visual Only) -->
+    <!-- ========================= -->
+
+    <link name="laser_system">
+
+      <!-- No physics influence -->
+      <gravity>false</gravity>
+      <kinematic>true</kinematic>
+      <self_collide>false</self_collide>
+
+      <pose>0 0 0 0 0 0</pose>
+
+      <inertial>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.000001</ixx>
+          <iyy>0.000001</iyy>
+          <izz>0.000001</izz>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+        </inertia>
+      </inertial>
+
+      <!-- Visual only -->
+      <visual name="laser_visual">
+        <geometry>
+          <box>
+            <size>0.1 0.1 0.1</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 0 0 1</ambient>
+          <diffuse>1 0 0 1</diffuse>
+        </material>
+      </visual>
+
+    </link>
+
+    <!-- Attach laser to camera -->
+    <joint name="laser_mount_joint" type="fixed">
+      <parent>camera_link</parent>
+      <child>laser_system</child>
+      <pose>0 0 0 0 0 0</pose>
+    </joint>
+
   </model>
 </sdf>
