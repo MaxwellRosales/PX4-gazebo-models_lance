@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version='1.11'>
+  <model name='laser_bar'>
+    <link name='chassis'>
+      <inertial>
+        <mass>0</mass>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <pose>0 0 3 0 0 0</pose>
+      <!-- <visual name='chassis_fixed_joint_lump__bar_visual'>
+        <pose>0 0 -0.5 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.5 1 0.050000000000000003</size>
+          </box>
+        </geometry>
+        <material>
+          <diffuse>0.289249986 0.637250006 1 1</diffuse>
+          <ambient>0.289249986 0.637250006 1 1</ambient>
+        </material>
+      </visual> -->
+    </link>
+
+    <!-- joint_1 + bar: was two chained frames off chassis -->
+    <joint name='joint_1' type='fixed'>
+      <pose relative_to='chassis'>0 0 -0.5 0 0 0</pose>
+      <parent>chassis</parent>
+      <child>bar</child>
+    </joint>
+    <link name='bar'>
+      <pose relative_to='joint_1'>0 0 0 0 0 0</pose>
+      <inertial>
+        <mass>0</mass>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <!-- camera_frame + camera: was two chained frames off bar -->
+    <joint name='camera_frame' type='fixed'>
+      <pose relative_to='bar'>0 0 -0.050000000000000003 -3.1415926535897931 0 1.5708926535897942</pose>
+      <parent>bar</parent>
+      <child>camera</child>
+    </joint>
+    <link name='camera'>
+      <pose relative_to='camera_frame'>0 0 0 0 0 0</pose>
+      <inertial>
+        <mass>0</mass>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+    </link>
+
+    <!-- laser pivot 1 chain -->
+    <joint name='pivot_joint1' type='fixed'>
+      <pose relative_to='chassis'>0 -2 -0.5 0 1.5706999999997038 0</pose>
+      <parent>chassis</parent>
+      <child>laser_pivot1</child>
+    </joint>
+    <link name='laser_pivot1'>
+      <pose relative_to='pivot_joint1'>0 0 0 0 0 0</pose>
+      <visual name='laser_pivot1_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.5</length>
+            <radius>0.050000000000000003</radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <diffuse>0 0 0 1</diffuse>
+          <ambient>0 0 0 1</ambient>
+        </material>
+      </visual>
+      <inertial>
+        <mass>0</mass>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+    </link>
+    <joint name='laser_frame1' type='fixed'>
+      <pose relative_to='laser_pivot1'>0 0 0 -0.7853981633974483 1.5706999999997038 0</pose>
+      <parent>laser_pivot1</parent>
+      <child>laser1</child>
+    </joint>
+    <link name='laser1'>
+      <pose relative_to='laser_frame1'>0 0 0.15 0 0 0</pose>
+      <visual name='laser1_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.25</length>
+            <radius>0.025000000000000001</radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <diffuse>1 0 0 1</diffuse>
+          <ambient>1 0 0 1</ambient>
+        </material>
+      </visual>
+      <inertial>
+        <mass>0</mass>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <light name='laser1_spot' type='spot'>
+        <pose>0 0 0.125 0 0 0</pose>   <!-- tip of the cylinder -->
+        <direction>0 0 1</direction>    <!-- along the laser axis -->
+        <diffuse>0 1 0 1</diffuse>     <!-- red to match laser1 visual -->
+        <specular>0 1 0 1</specular>
+        <intensity>1.0</intensity>
+        <range>50</range>
+        <attenuation>
+          <range>50</range>
+          <constant>1.0</constant>
+          <linear>0.0</linear>
+          <quadratic>0.0</quadratic>
+        </attenuation>
+        <spot>
+          <inner_angle>0.01</inner_angle>
+          <outer_angle>0.03</outer_angle>
+          <falloff>1.0</falloff>
+        </spot>
+        <cast_shadows>true</cast_shadows>
+      </light>
+    </link>
+
+    <!-- laser pivot 2 chain -->
+    <joint name='pivot_joint2' type='fixed'>
+      <pose relative_to='chassis'>0 2 -0.5 0 1.5706999999997038 0</pose>
+      <parent>chassis</parent>
+      <child>laser_pivot2</child>
+    </joint>
+    <link name='laser_pivot2'>
+      <pose relative_to='pivot_joint2'>0 0 0 0 0 0</pose>
+      <visual name='laser_pivot2_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.5</length>
+            <radius>0.050000000000000003</radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <diffuse>0 0 0 1</diffuse>
+          <ambient>0 0 0 1</ambient>
+        </material>
+      </visual>
+      <inertial>
+        <mass>0</mass>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+    </link>
+    <joint name='laser_frame2' type='fixed'>
+      <pose relative_to='laser_pivot2'>0 0 0 0.7853981633974483 1.5706999999997038 0</pose>
+      <parent>laser_pivot2</parent>
+      <child>laser2</child>
+    </joint>
+    <link name='laser2'>
+      <pose relative_to='laser_frame2'>0 0 0.15 0 0 0</pose>
+      <visual name='laser2_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.25</length>
+            <radius>0.025000000000000001</radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <diffuse>0 1 0.313749969 1</diffuse>
+          <ambient>0 1 0.313749969 1</ambient>
+        </material>
+      </visual>
+      <inertial>
+        <mass>0</mass>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+      <light name='laser2_spot' type='spot'>
+        <pose>0 0 0.125 0 0 0</pose>   <!-- tip of the cylinder -->
+        <direction>0 0 1</direction>    <!-- along the laser axis -->
+        <diffuse>0 1 0 1</diffuse>     <!-- red to match laser2 visual -->
+        <specular>0 1 0 1</specular>
+        <intensity>1.0</intensity>
+        <range>50</range>
+        <attenuation>
+          <range>50</range>
+          <constant>1.0</constant>
+          <linear>0.0</linear>
+          <quadratic>0.0</quadratic>
+        </attenuation>
+        <spot>
+          <inner_angle>0.01</inner_angle>
+          <outer_angle>0.03</outer_angle>
+          <falloff>1.0</falloff>
+        </spot>
+        <cast_shadows>true</cast_shadows>
+      </light>
+    </link>
+
+  </model>
+</sdf>
